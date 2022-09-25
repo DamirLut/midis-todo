@@ -1,0 +1,65 @@
+{
+  "0t4apg": {
+    "title": "midis",
+    "columns": [
+      {
+        "name": "Задачи",
+        "tasks": [
+          {
+            "id": "0f9t0l2rfkko",
+            "name": "Продать Макара",
+            "description": "10 цыганиума ",
+            "column": 0
+          }
+        ],
+        "main": true,
+        "color": "primary"
+      },
+      {
+        "name": "В работе",
+        "tasks": [
+          {
+            "id": "0kq05ebu68ko",
+            "name": "Купить Extreme Code",
+            "description": "100 защекоин ",
+            "column": 1
+          }
+        ],
+        "main": false,
+        "color": "secondary"
+      },
+      {
+        "name": "Тестируются",
+        "tasks": [
+          {
+            "id": "09ccmf5t87d8",
+            "name": "test",
+            "description": "test",
+            "column": 2
+          },
+          {
+            "id": "0agnba4d91n",
+            "name": "Сделать Midis-Todo",
+            "description": "",
+            "column": 2
+          }
+        ],
+        "main": false,
+        "color": "warning"
+      },
+      {
+        "name": "Выполненно",
+        "tasks": [
+          {
+            "id": "0kp2rdaembeg",
+            "name": "Поспать ",
+            "description": "",
+            "column": 3
+          }
+        ],
+        "main": false,
+        "color": "success"
+      }
+    ]
+  }
+}
