@@ -3,5 +3,11 @@ import { atom } from 'recoil';
 
 export const TableAtom = atom<TableData>({
   key: 'table.atom',
-  default: { title: '', columns: [] },
+  ///@ts-ignore
+  default: { error: '' },
+});
+
+export const TableExistAtom = atom({
+  key: 'table.exits.atom',
+  default: false,
 });

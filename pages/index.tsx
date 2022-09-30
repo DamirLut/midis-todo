@@ -1,4 +1,4 @@
-import { Container } from '@nextui-org/react';
+import { Container, User, Text, Button } from '@nextui-org/react';
 import Table from '../components/Table';
 
 import Header from 'components/Header';
@@ -8,19 +8,19 @@ import CreateTable from 'components/CreateTable';
 import Loading from 'components/Loading';
 import { ModalAtom } from 'store/modal';
 import { setRecoil } from 'recoil-nexus';
-import { TableAtom } from 'store/table';
+import { TableAtom, TableExistAtom } from 'store/table';
 import { Fetch } from 'lib/fetch';
 import { TableData } from 'lib/api.type';
 
 const Content = () => {
   const [table, setTable] = useRecoilState(TableAtom);
-  const [exists, setExists] = React.useState(false);
+  const [exists, setExists] = useRecoilState(TableExistAtom);
 
   React.useEffect(() => {
     const getTable = async () => {
       const id = localStorage.getItem('table-id');
       if (id) {
-        const data = await Fetch<TableData>('api/table/get', { id });
+        const data = await Fetch<TableData>('https://todo.iky.su/table/get', { id });
         if (!('error' in data)) {
           setTable(data);
           document.title = data.title;
@@ -32,15 +32,45 @@ const Content = () => {
     getTable();
   }, []);
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     setExists(!('error' in table));
-  },['error' in table]);
+  }, ['error' in table]);
 
-  return <Container css={{ height: '100%' }}>{exists ? <Table /> : <CreateTable />}</Container>;
+  return <Container>{exists ? <Table /> : <CreateTable />}</Container>;
 };
+
+const users = [
+  {
+    url: 'https://github.com/Damirlut',
+    avatar:
+      'https://portal.midis.info/upload/resize_cache/main/780/yncs8n7bvk7vd3q8ri9gv59qi4ovpfu0/200_200_2/livesey2.webp',
+    username: 'Лутфрахманов Дамир',
+  },
+  {
+    url: 'https://github.com/Ikysu',
+    avatar:
+      'https://portal.midis.info/upload/resize_cache/main/2fa/b6d0x0zlif9608x3hhtt1fr48d2rbac3/200_200_2/jojo_livesey.webp',
+    username: 'Сагабутдинов Даниил',
+  },
+  {
+    url: 'https://github.com/Huinko',
+    avatar:
+      'https://portal.midis.info/upload/resize_cache/main/a3e/30wu4yipj12oqv6ckxnhax8pwinq2sb0/200_200_2/$RPDBI5D.PNG',
+    username: 'Маркин Егор',
+  },
+];
 
 export default function Main() {
   const modal = useRecoilValue(ModalAtom);
+  const [table, setTable] = useRecoilState(TableAtom);
+  const [exists, setExists] = useRecoilState(TableExistAtom);
+
+  const exitTable = () => {
+    ///@ts-ignore
+    setTable({ error: '' });
+    localStorage.removeItem('table-id');
+    setExists(false);
+  };
 
   return (
     <div id="root">
@@ -53,11 +83,29 @@ export default function Main() {
       </main>
       <footer>
         <Container
+          id="footer"
           css={{
-            height: '5vh',
-            backgroundColor: '$colors$neutral',
+            minheight: '5vh',
+            display: 'flex',
+            alignItems: 'center',
+            backgroundColor: '$border',
+            p: '$2',
           }}>
-          Делали какие-то JS клоуны
+          <Container>
+            <Text h5 b>
+              Группа П-38
+            </Text>
+            {users.map((user) => (
+              <User key={user.username} src={user.avatar} name={user.username}>
+                <User.Link href={user.url}>@{user.url.split('https://github.com/')[1]}</User.Link>
+              </User>
+            ))}
+          </Container>
+          {exists && (
+            <Button color="error" onClick={exitTable} auto>
+              Выйти
+            </Button>
+          )}
         </Container>
       </footer>
     </div>

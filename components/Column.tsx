@@ -14,7 +14,10 @@ type ColumnProps = {
 
 export default function Column({ data }: ColumnProps) {
   return (
-    <Card css={{ $$cardColor: '$colors$' + data.color }}>
+    <Card
+      css={{
+        $$cardColor: '$colors$' + data.color,
+      }}>
       <Card.Header
         css={{
           dflex: 'center',
@@ -65,7 +68,11 @@ const ModalCreate = () => {
   const [table, setTable] = useRecoilState(TableAtom);
 
   const createTask = async () => {
-    const data = await Fetch<TaskData>('api/task/create', { table_id: tableId, name, description });
+    const data = await Fetch<TaskData>('https://todo.iky.su/task/create', {
+      table_id: tableId,
+      name,
+      description,
+    });
     if (!('error' in data)) {
       const copy: TableData = JSON.parse(JSON.stringify(table));
       console.log(copy);

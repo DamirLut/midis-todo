@@ -40,7 +40,7 @@ function EditTaskModal({ data }: TaskProps) {
   const [desciprtion, setDescription] = React.useState(data.description);
 
   const moveTo = async (keys: any) => {
-    const response = await Fetch<TableData>('api/task/move', {
+    const response = await Fetch<TableData>('https://todo.iky.su/task/move', {
       table_id: localStorage.getItem('table-id'),
       id: data.id,
       position: table.columns.findIndex((value) => value.name === keys.anchorKey),
@@ -64,6 +64,7 @@ function EditTaskModal({ data }: TaskProps) {
           value={desciprtion}
           onChange={(e) => setDescription(e.target.value)}
           bordered
+          readOnly
           label="Описание"
         />
 

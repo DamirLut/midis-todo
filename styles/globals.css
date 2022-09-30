@@ -3,14 +3,11 @@
   display: flex;
   flex-direction: column;
   margin: 0;
+  overflow-y: auto;
 }
 
 footer {
   margin-top: auto;
-}
-
-main {
-  height: 100%;
 }
 
 #column::-webkit-scrollbar {
@@ -33,4 +30,27 @@ main {
 
 #switch-mode > div[aria-checked='true'] {
   background: var(--nextui-colors-backgroundContrast);
+}
+
+@media screen and (max-width: 960px) {
+  #grid-columns {
+    display: flex;
+    flex-direction: column;
+  }
+  #footer {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+  }
+  #create-table {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+  }
+}
+
+#grid-columns > div,
+#create-table > div {
+  max-width: 100%;
+  width: 100%;
 }

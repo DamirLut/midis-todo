@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, Grid, Input, Text } from '@nextui-org/react';
+import { Button, Card, Grid, Input, Loading, Text } from '@nextui-org/react';
 import { useSetRecoilState } from 'recoil';
 import { TableAtom } from 'store/table';
 import { Fetch } from 'lib/fetch';
@@ -9,20 +9,29 @@ export default function CreateTable() {
   const [createName, setCreateName] = React.useState('');
   const [joinName, setJoinName] = React.useState('');
   const setTable = useSetRecoilState(TableAtom);
+  const [loading, setLoading] = React.useState(false);
 
   const create = async () => {
     if (createName) {
-      const data = await Fetch<{ id: string }>('api/table/create', { name: createName });
+      setLoading(true);
+      const data = await Fetch<{ id: string }>('https://todo.iky.su/table/create', {
+        name: createName,
+      });
       if ('id' in data) {
         localStorage.setItem('table-id', data.id);
-        const table = await Fetch<TableData>('api/table/get', { id: data.id });
-        if (!('error' in table)) setTable(table);
+        setTimeout(async () => {
+          const table = await Fetch<TableData>('https://todo.iky.su/table/get', { id: data.id });
+          if (!('error' in table)) setTable(table);
+          setLoading(false);
+        }, 1000);
       }
     }
   };
   const join = async () => {
     if (joinName) {
-      const table = await Fetch<TableData>('api/table/get', { id: joinName });
+      setLoading(true);
+      const table = await Fetch<TableData>('https://todo.iky.su/table/get', { id: joinName });
+      setLoading(false);
       if ('error' in table) {
         return alert('Таблица не найдена');
       }
@@ -32,7 +41,11 @@ export default function CreateTable() {
   };
 
   return (
-    <Grid.Container justify="space-around" alignItems="center" css={{ height: '100%' }}>
+    <Grid.Container
+      justify="space-around"
+      alignItems="center"
+      css={{ height: '100%', mt: '1em', mb: '1em' }}
+      id="create-table">
       <Grid xs={5}>
         <Card>
           <Card.Header css={{ bg: '$colors$warning' }}>
@@ -42,8 +55,8 @@ export default function CreateTable() {
             <Input label="Название" bordered onChange={(e) => setCreateName(e.target.value)} />
           </Card.Body>
           <Card.Footer>
-            <Button color="warning" onClick={create}>
-              Создать
+            <Button disabled={loading} color="warning" onClick={create}>
+              {loading ? <Loading type="points" color="currentColor" size="sm" /> : 'Создать'}
             </Button>
           </Card.Footer>
         </Card>
@@ -57,8 +70,8 @@ export default function CreateTable() {
             <Input label="id" bordered onChange={(e) => setJoinName(e.target.value)} />
           </Card.Body>
           <Card.Footer>
-            <Button color="success" onClick={join}>
-              Войти
+            <Button disabled={loading} color="success" onClick={join}>
+              {loading ? <Loading type="points" color="currentColor" size="sm" /> : 'Войти'}
             </Button>
           </Card.Footer>
         </Card>
