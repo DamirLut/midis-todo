@@ -18,13 +18,12 @@ const Content = () => {
 
   React.useEffect(() => {
     const getTable = async () => {
-      const id = localStorage.getItem('table-id');
+      const id = localStorage.getItem('table-id')?.trim();
       if (id) {
         const data = await Fetch<TableData>('https://todo.iky.su/table/get', { id });
         if (!('error' in data)) {
           setTable(data);
           document.title = data.title;
-        } else {
         }
       }
     };
@@ -88,10 +87,13 @@ export default function Main() {
             minheight: '5vh',
             display: 'flex',
             alignItems: 'center',
+            justifyContent: 'space-between',
             backgroundColor: '$border',
             p: '$2',
+            pl: '1em',
+            pr: '1em',
           }}>
-          <Container>
+          <div>
             <Text h5 b>
               Группа П-38
             </Text>
@@ -100,9 +102,9 @@ export default function Main() {
                 <User.Link href={user.url}>@{user.url.split('https://github.com/')[1]}</User.Link>
               </User>
             ))}
-          </Container>
+          </div>
           {exists && (
-            <Button color="error" onClick={exitTable} auto>
+            <Button color="error" onClick={exitTable} size="md">
               Выйти
             </Button>
           )}

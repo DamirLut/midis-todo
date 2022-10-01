@@ -30,12 +30,14 @@ export default function CreateTable() {
   const join = async () => {
     if (joinName) {
       setLoading(true);
-      const table = await Fetch<TableData>('https://todo.iky.su/table/get', { id: joinName });
+      const table = await Fetch<TableData>('https://todo.iky.su/table/get', {
+        id: joinName.trim(),
+      });
       setLoading(false);
       if ('error' in table) {
         return alert('Таблица не найдена');
       }
-      localStorage.setItem('table-id', joinName);
+      localStorage.setItem('table-id', joinName.trim());
       setTable(table);
     }
   };

@@ -32,7 +32,7 @@ export default function Column({ data }: ColumnProps) {
         id="column"
         css={{
           gap: '$5',
-          h: '80vh',
+          h: '72vh',
         }}>
         {data.tasks.map((task) => (
           <Task data={task} key={task.id} />

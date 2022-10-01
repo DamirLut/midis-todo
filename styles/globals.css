@@ -32,11 +32,13 @@ footer {
   background: var(--nextui-colors-backgroundContrast);
 }
 
-@media screen and (max-width: 960px) {
+@media screen and (max-width: 1280px) {
   #grid-columns {
     display: flex;
     flex-direction: column;
+    flex-wrap: wrap;
   }
+
   #footer {
     display: flex;
     flex-direction: column;
@@ -49,8 +51,18 @@ footer {
   }
 }
 
+@media screen and (max-width: 960px) {
+  #grid-columns {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 #grid-columns > div,
-#create-table > div {
-  max-width: 100%;
-  width: 100%;
+#create-table > div,
+header > div,
+main > div,
+footer > div {
+  max-width: 100% !important;
+  width: 100% !important;
 }

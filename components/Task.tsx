@@ -20,7 +20,7 @@ export default function Task({ data }: TaskProps) {
       css={{ minHeight: '100px' }}
       onPress={() => setModal(<EditTaskModal data={data} />)}>
       <Card.Header>
-        <Text size={18} b>
+        <Text size={18} b css={{ truncateText: '200px' }}>
           {data.name}
         </Text>
       </Card.Header>
@@ -28,7 +28,7 @@ export default function Task({ data }: TaskProps) {
         css={{
           overflow: 'hidden',
         }}>
-        <Text>{data.description}</Text>
+        <Text css={{ truncateText: '200px' }}>{data.description}</Text>
       </Card.Body>
     </Card>
   );
@@ -37,13 +37,27 @@ export default function Task({ data }: TaskProps) {
 function EditTaskModal({ data }: TaskProps) {
   const setModal = useSetRecoilState(ModalAtom);
   const [table, setTable] = useRecoilState(TableAtom);
-  const [desciprtion, setDescription] = React.useState(data.description);
+  const [description, setDescription] = React.useState(data.description);
 
   const moveTo = async (keys: any) => {
+    if (keys.anchorKey === undefined) return;
     const response = await Fetch<TableData>('https://todo.iky.su/task/move', {
       table_id: localStorage.getItem('table-id'),
       id: data.id,
       position: table.columns.findIndex((value) => value.name === keys.anchorKey),
+    });
+    if (!('error' in response)) {
+      setTable(response);
+      setModal(null);
+    }
+  };
+
+  const changeTask = async () => {
+    if (!description) return;
+    const response = await Fetch<TableData>('https://todo.iky.su/task/change', {
+      table_id: localStorage.getItem('table-id'),
+      id: data.id,
+      description,
     });
     if (!('error' in response)) {
       setTable(response);
@@ -72,17 +86,15 @@ function EditTaskModal({ data }: TaskProps) {
           Задача: <Text h4>{data.name}</Text>
         </Text>
         <Textarea
-          value={desciprtion}
+          value={description}
           onChange={(e) => setDescription(e.target.value)}
           bordered
-          readOnly
           label="Описание"
         />
 
         <Dropdown>
           <Dropdown.Button flat>Колонка</Dropdown.Button>
           <Dropdown.Menu
-            disabledKeys={[table.columns[0].name]}
             selectedKeys={[table.columns[data.column].name]}
             selectionMode="single"
             onSelectionChange={moveTo}>
@@ -95,13 +107,11 @@ function EditTaskModal({ data }: TaskProps) {
         </Dropdown>
       </Modal.Body>
       <Modal.Footer>
-        <Button
-          auto
-          color="error"
-          onClick={() => {
-            del();
-          }}>
+        <Button auto color="error" onClick={del}>
           Удалить
+        </Button>
+        <Button auto color="success" onClick={changeTask}>
+          Сохранить
         </Button>
       </Modal.Footer>
     </Modal>
