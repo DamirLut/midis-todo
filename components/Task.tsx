@@ -51,6 +51,17 @@ function EditTaskModal({ data }: TaskProps) {
     }
   };
 
+  const del = async () => {
+    const response = await Fetch<TableData>('https://todo.iky.su/task/delete', {
+      table_id: localStorage.getItem('table-id'),
+      id: data.id,
+    });
+    if (!('error' in response)) {
+      setTable(response);
+      setModal(null);
+    }
+  };
+
   return (
     <Modal closeButton open={true} onClose={() => setModal(null)}>
       <Modal.Header>
@@ -84,8 +95,13 @@ function EditTaskModal({ data }: TaskProps) {
         </Dropdown>
       </Modal.Body>
       <Modal.Footer>
-        <Button auto color="success">
-          Сохранить
+        <Button
+          auto
+          color="error"
+          onClick={() => {
+            del();
+          }}>
+          Удалить
         </Button>
       </Modal.Footer>
     </Modal>
