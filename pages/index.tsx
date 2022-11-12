@@ -48,7 +48,7 @@ const users = [
   {
     url: 'https://github.com/Ikysu',
     avatar:
-      'https://portal.midis.info/upload/resize_cache/main/2fa/b6d0x0zlif9608x3hhtt1fr48d2rbac3/200_200_2/jojo_livesey.webp',
+      'https://web.damirlut.online/pirate.gif',
     username: 'Сагабутдинов Даниил',
   },
   {
